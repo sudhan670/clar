@@ -21,4 +21,10 @@ Things you may want to cover:
 
 * Deployment instructions
 
-* ...
+# Room Booking
+ <img src="https://github.com/sudhan670/clar/blob/main/new%20room.png" alt="v"/> 
+'''Status'''
+<img src="https://github.com/sudhan670/clar/blob/main/accepted-rejected.png"/> 
+# Admin Page
+<img  src="https://github.com/sudhan670/clar/blob/main/admin.png" /> 
+<img src="https://github.com/sudhan670/clar/blob/main/admin%20details.png"/>
