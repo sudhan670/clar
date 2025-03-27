@@ -1,30 +1,77 @@
-# README
+# Meeting Booking System
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This project is a **Room Booking System** that allows users to book rooms, check booking statuses, and manage reservations through an admin panel.
 
-Things you may want to cover:
+## Prerequisites
 
-* Ruby version
+- **Ruby Version:** 3.2.2
+- **System Dependencies:**
+  - Ubuntu
+  - Windows Linux Subsystem (WSL)
+- **Database:** SQLite3
 
-* System dependencies
+## Setup and Installation
 
-* Configuration
+### 1. Clone the Repository
+```sh
+  git clone https://github.com/sudhan670/clar.git
+  cd clar
+```
 
-* Database creation
+### 2. Install Dependencies
+```sh
+  bundle install
+```
 
-* Database initialization
+### 3. Database Setup
+```sh
+  rails db:create
+  rails db:migrate
+```
 
-* How to run the test suite
+### 4. Run the Application
+```sh
+  rails server
+```
 
-* Services (job queues, cache servers, search engines, etc.)
+## Running Tests
+To run the test suite, execute:
+```sh
+  rspec
+```
 
-* Deployment instructions
+## Features
+- **User Dashboard:** Users can book rooms and view their booking status.
+- **Booking Status:** Real-time updates on accepted or rejected requests.
+- **Admin Panel:** Administrators can view all bookings and manage reservations.
+- **SQLite3 Database:** Lightweight and easy-to-use database integration.
 
-# Room Booking
- <img src="https://github.com/sudhan670/clar/blob/main/new%20room.png" alt="v"/> 
-# Status
-<img src="https://github.com/sudhan670/clar/blob/main/accepted-rejected.png"/> 
-# Admin Page
-<img  src="https://github.com/sudhan670/clar/blob/main/admin.png" /> 
-<img src="https://github.com/sudhan670/clar/blob/main/admin%20details.png"/>
+## Screenshots
+
+### Room Booking Page
+![Room Booking](https://github.com/sudhan670/clar/blob/main/new%20room.png)
+
+### Booking Status Page
+![Booking Status](https://github.com/sudhan670/clar/blob/main/accepted-rejected.png)
+
+### Admin Panel
+![Admin Dashboard](https://github.com/sudhan670/clar/blob/main/admin.png)
+![Admin Details](https://github.com/sudhan670/clar/blob/main/admin%20details.png)
+
+## Deployment
+For deploying the application, consider using **Heroku** or **AWS**. Ensure that the database configurations align with the production environment.
+
+## Contributing
+If you'd like to contribute:
+1. Fork the repository
+2. Create a new branch (`git checkout -b feature-branch`)
+3. Commit your changes (`git commit -m 'Add new feature'`)
+4. Push to the branch (`git push origin feature-branch`)
+5. Open a pull request
+
+## License
+This project is licensed under the **MIT License**.
+
+## Contact
+For further inquiries, reach out at [GitHub](https://github.com/sudhan670).
+
