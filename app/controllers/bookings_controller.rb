@@ -20,33 +20,51 @@ class BookingsController < ApplicationController
     @booking = @room.bookings.build(booking_params)
     @booking.user = current_user
 
-    if @booking.save
-      # Create meeting participants using participant_ids from form
-      if params[:participant_ids].present?
-        params[:participant_ids].each do |user_id|
-          user = User.find(user_id)
-          MeetingParticipant.create(
-            user: user,
-            booking: @booking,
-            status: 'pending'
-          )
-        end
-      end
-
-      # Always create a meeting participant for the booking creator
-      MeetingParticipant.create(
-        user: current_user,
-        booking: @booking,
-        status: 'accepted'
-      )
-
-      redirect_to room_booking_path(@room, @booking), notice: 'Booking was successfully created.'
-    else
-      render :new
+    ActiveRecord::Base.transaction do
+      @booking.save!
+      create_meeting_participants!
     end
+
+    redirect_to room_booking_path(@room, @booking), notice: 'Booking was successfully created.'
+  rescue ActiveRecord::RecordInvalid => e
+    @booking.errors.merge!(e.record.errors) if e.record != @booking
+    render :new, status: :unprocessable_entity
+  rescue ActiveRecord::RecordNotFound => e
+    @booking.errors.add(:base, e.message)
+    render :new, status: :unprocessable_entity
   end
 
   private
+
+  def create_meeting_participants!
+    participant_ids = Array(params[:participant_ids]).reject(&:blank?).map(&:to_i).uniq - [current_user.id]
+    users_by_id = User.where(id: participant_ids).index_by(&:id)
+
+    missing_ids = participant_ids - users_by_id.keys
+    raise ActiveRecord::RecordNotFound, "Couldn't find User with IDs: #{missing_ids.join(', ')}" if missing_ids.any?
+
+    timestamp = Time.current
+    participant_rows = users_by_id.values.map do |user|
+      {
+        user_id: user.id,
+        booking_id: @booking.id,
+        status: 'pending',
+        created_at: timestamp,
+        updated_at: timestamp
+      }
+    end
+
+    participant_rows << {
+      user_id: current_user.id,
+      booking_id: @booking.id,
+      status: 'accepted',
+      created_at: timestamp,
+      updated_at: timestamp
+    }
+
+    MeetingParticipant.insert_all!(participant_rows)
+  end
+
 
   def set_room
     @room = if params[:room_id]
