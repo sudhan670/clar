@@ -1,42 +1,69 @@
-<h2>Sign up</h2>
+<div class="d-flex justify-content-center align-items-center" style="min-height: 90vh;">
+  <div class="card p-4 shadow-lg border-0 rounded-4" style="width: 100%; max-width: 500px;">
 
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
+    <h3 class="text-center mb-4 fw-semibold">Create Account 🚀</h3>
 
-  <div class="field mb-3">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control" %>
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+
+      <%= render "devise/shared/error_messages", resource: resource %>
+
+      <div class="mb-3">
+        <%= f.label :email, class: "form-label small" %>
+        <%= f.email_field :email,
+              autofocus: true,
+              autocomplete: "email",
+              placeholder: "Enter your email",
+              class: "form-control rounded-3" %>
+      </div>
+
+      <div class="mb-3">
+        <%= f.label :name, class: "form-label small" %>
+        <%= f.text_field :name,
+              placeholder: "Your full name",
+              class: "form-control rounded-3" %>
+      </div>
+
+      <div class="mb-3">
+        <%= f.label :position, class: "form-label small" %>
+        <%= f.select :position,
+              options_for_select(['HR', 'Senior Employee', 'Team Lead', 'Junior Developer']),
+              { include_blank: "Select your role" },
+              class: "form-control rounded-3" %>
+      </div>
+
+      <div class="mb-3">
+        <%= f.label :password, class: "form-label small" %>
+        <% if @minimum_password_length %>
+          <div class="small text-muted mb-1">
+            Minimum <%= @minimum_password_length %> characters
+          </div>
+        <% end %>
+        <%= f.password_field :password,
+              autocomplete: "new-password",
+              placeholder: "Create a password",
+              class: "form-control rounded-3" %>
+      </div>
+
+      <div class="mb-3">
+        <%= f.label :password_confirmation, class: "form-label small" %>
+        <%= f.password_field :password_confirmation,
+              autocomplete: "new-password",
+              placeholder: "Confirm password",
+              class: "form-control rounded-3" %>
+      </div>
+
+      <!-- Submit -->
+      <div class="mt-4">
+        <%= f.submit "Sign up",
+              class: "btn btn-primary w-100 rounded-pill py-2" %>
+      </div>
+
+    <% end %>
+
+    <!-- Links -->
+    <div class="text-center mt-3 small">
+      <%= render "devise/shared/links" %>
+    </div>
+
   </div>
-
-  <div class="field mb-3">
-    <%= f.label :name %><br />
-    <%= f.text_field :name, class: "form-control" %>
-  </div>
-
-  <div class="field mb-3">
-    <%= f.label :position %><br />
-    <%= f.select :position, 
-                options_for_select(['hr', 'senior_employee', 'team_lead', 'junior_developer']), 
-                {include_blank: "Select your position"}, 
-                {class: "form-control"} %>
-  </div>
-
-  <div class="field mb-3">
-    <%= f.label :password %>
-    <% if @minimum_password_length %>
-    <em>(<%= @minimum_password_length %> characters minimum)</em>
-    <% end %><br />
-    <%= f.password_field :password, autocomplete: "new-password", class: "form-control" %>
-  </div>
-
-  <div class="field mb-3">
-    <%= f.label :password_confirmation %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control" %>
-  </div>
-
-  <div class="actions">
-    <%= f.submit "Sign up", class: "btn btn-primary" %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+</div>

@@ -1,48 +1,94 @@
-<div class="container">
-  <h1>Booking Details</h1>
+<div class="container py-4">
+  <h2 class="fw-bold mb-4">Booking Details</h2>
 
-  <div class="row">
-    <div class="col-md-6">
-      <div class="card">
+  <div class="row g-4">
+
+    <!-- Booking Info -->
+    <div class="col-lg-6">
+      <div class="card shadow-sm border-0 booking-card h-100">
         <div class="card-body">
-          <h5 class="card-title">Booking Information</h5>
-          <p><strong>Room:</strong> <%= @booking.room.name %></p>
-          <p><strong>Date:</strong> <%= @booking.start_time.to_date %></p>
-          <p><strong>Time:</strong> <%= @booking.start_time.strftime("%H:%M") %> - <%= @booking.end_time.strftime("%H:%M") %></p>
-          
-          <p><strong>Status:</strong>
-            <span class="badge bg-<%= @booking.status == 'confirmed' ? 'success' : (@booking.status == 'canceled' ? 'danger' : 'warning') %>">
+
+          <h5 class="fw-semibold mb-3">Booking Information</h5>
+
+          <div class="mb-2">
+            <small class="text-muted">Room</small>
+            <div class="fw-medium"><%= @booking.room.name %></div>
+          </div>
+
+          <div class="mb-2">
+            <small class="text-muted">Date</small>
+            <div><%= @booking.start_time.to_date %></div>
+          </div>
+
+          <div class="mb-2">
+            <small class="text-muted">Time</small>
+            <div>
+              <%= @booking.start_time.strftime("%H:%M") %> -
+              <%= @booking.end_time.strftime("%H:%M") %>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <small class="text-muted">Status</small><br>
+            <span class="badge px-3 py-2 bg-<%= 
+              @booking.status == 'confirmed' ? 'success' : 
+              (@booking.status == 'canceled' ? 'danger' : 'warning') 
+            %>">
               <%= @booking.status %>
             </span>
-          </p>
-          <p><strong>Organizer:</strong> <%= @booking.user.name %></p>
+          </div>
+
+          <div>
+            <small class="text-muted">Organizer</small>
+            <div class="fw-medium"><%= @booking.user.name %></div>
+          </div>
+
         </div>
       </div>
     </div>
 
-    <div class="col-md-6">
-      <div class="card">
-        <div class="card-header">
-          Participants
-        </div>
-        <ul class="list-group list-group-flush">
-          <% @meeting_participants.each do |participant| %>
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-              <%= participant.user.name %> 
-              <span class="badge bg-<%= 
-                participant.status == 'accepted' ? 'success' : 
-                (participant.status == 'rejected' ? 'danger' : 'warning') 
-              %>">
-                <%= participant.status.capitalize %>
-              </span>
-            </li>
+    <!-- Participants -->
+    <div class="col-lg-6">
+      <div class="card shadow-sm border-0 booking-card h-100">
+        <div class="card-body">
+
+          <h5 class="fw-semibold mb-3">Participants</h5>
+
+          <% if @meeting_participants.any? %>
+            <div class="list-group list-group-flush">
+
+              <% @meeting_participants.each do |participant| %>
+                <div class="list-group-item d-flex justify-content-between align-items-center px-0 border-0 participant-item">
+
+                  <div class="fw-medium">
+                    <%= participant.user.name %>
+                  </div>
+
+                  <span class="badge px-3 py-2 bg-<%= 
+                    participant.status == 'accepted' ? 'success' : 
+                    (participant.status == 'rejected' ? 'danger' : 'warning') 
+                  %>">
+                    <%= participant.status.capitalize %>
+                  </span>
+
+                </div>
+              <% end %>
+
+            </div>
+          <% else %>
+            <div class="text-muted">No participants</div>
           <% end %>
-        </ul>
+
+        </div>
       </div>
     </div>
+
   </div>
 
-  <div class="mt-3">
-    <%= link_to "Back to Room", room_path(@room), class: "btn btn-warning" %>
+  <!-- Back Button -->
+  <div class="mt-4">
+    <%= link_to room_path(@room), class: "btn btn-outline-primary px-4" do %>
+      ← Back to Room
+    <% end %>
   </div>
 </div>

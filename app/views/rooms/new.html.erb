@@ -1,34 +1,58 @@
-<h1><%= @room.new_record? ? "Add New Room" : "Edit Room" %></h1>
+<div class="d-flex justify-content-center align-items-center" style="min-height: 85vh;">
+  <div class="card p-4 shadow-lg border-0 rounded-4" style="width: 100%; max-width: 600px;">
 
-<%= form_with(model: @room, local: true) do |form| %>
-  <% if @room.errors.any? %>
-    <div class="alert alert-danger">
-      <h2><%= pluralize(@room.errors.count, "error") %> prohibited this room from being saved:</h2>
-      <ul>
-        <% @room.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+    <h3 class="text-center fw-semibold mb-4">
+      <%= @room.new_record? ? "Add New Room 🏢" : "Edit Room ✏️" %>
+    </h3>
 
-  <div class="form-group mb-3">
-    <%= form.label :name %>
-    <%= form.text_field :name, class: "form-control" %>
+    <%= form_with(model: @room, local: true) do |form| %>
+
+      <% if @room.errors.any? %>
+        <div class="alert alert-danger rounded-3">
+          <strong><%= pluralize(@room.errors.count, "error") %>:</strong>
+          <ul class="mb-0 mt-2">
+            <% @room.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="mb-3">
+        <%= form.label :name, class: "form-label small" %>
+        <%= form.text_field :name,
+              placeholder: "Enter room name",
+              class: "form-control rounded-3" %>
+      </div>
+
+      <div class="mb-3">
+        <%= form.label :capacity, class: "form-label small" %>
+        <%= form.number_field :capacity,
+              min: 1,
+              placeholder: "Number of people",
+              class: "form-control rounded-3" %>
+      </div>
+
+      <div class="mb-3">
+        <%= form.label :description, class: "form-label small" %>
+        <%= form.text_area :description,
+              rows: 4,
+              placeholder: "Describe the room (optional)",
+              class: "form-control rounded-3" %>
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center mt-4">
+
+        <%= link_to "← Cancel",
+              rooms_path,
+              class: "btn btn-outline-secondary rounded-pill px-4" %>
+
+        <%= form.submit(@room.new_record? ? "Create Room" : "Update Room",
+              class: "btn btn-primary rounded-pill px-4") %>
+
+      </div>
+
+    <% end %>
+
   </div>
-
-  <div class="form-group mb-3">
-    <%= form.label :capacity %>
-    <%= form.number_field :capacity, min: 1, class: "form-control" %>
-  </div>
-
-  <div class="form-group mb-3">
-    <%= form.label :description %>
-    <%= form.text_area :description, class: "form-control", rows: 5 %>
-  </div>
-
-  <div class="actions">
-    <%= form.submit class: "btn btn-primary" %>
-    <%= link_to "Cancel", rooms_path, class: "btn btn-secondary" %>
-  </div>
-<% end %>
+</div>

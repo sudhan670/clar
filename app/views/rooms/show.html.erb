@@ -1,47 +1,105 @@
-<div class="d-flex justify-content-between align-items-center mb-4">
-  <h1><%= @room.name %></h1>
+<!-- 🔷 Header -->
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
   <div>
+    <h2 class="fw-semibold mb-1"><%= @room.name %></h2>
+    <small class="text-muted">Capacity: <%= @room.capacity %> people</small>
+  </div>
+
+  <div class="d-flex gap-2 flex-wrap">
+    <%= link_to "Book Room",
+          new_room_booking_path(@room),
+          class: "btn btn-primary rounded-pill px-4" %>
+
     <% if current_user.admin? %>
-      <%= link_to "Edit Room", edit_room_path(@room), class: "btn btn-warning" %>
-      <%= link_to "Delete Room", room_path(@room), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger" %>
+      <%= link_to "Edit",
+            edit_room_path(@room),
+            class: "btn btn-outline-warning rounded-pill px-3" %>
+
+      <%= link_to "Delete",
+            room_path(@room),
+            method: :delete,
+            data: { confirm: "Are you sure?" },
+            class: "btn btn-outline-danger rounded-pill px-3" %>
     <% end %>
-    <%= link_to "Book This Room", new_room_booking_path(@room), class: "btn btn-success" %>
   </div>
 </div>
 
-<div class="card mb-4">
+<!-- 🔷 Room Info Card -->
+<div class="card border-0 shadow-sm rounded-4 mb-4">
   <div class="card-body">
-    <h5 class="card-title">Room Details</h5>
-    <p><strong>Capacity:</strong> <%= @room.capacity %> people</p>
-    <p><strong>Description:</strong> <%= @room.description %></p>
+    <h5 class="fw-semibold mb-3">Room Details</h5>
+
+    <div class="row">
+      <div class="col-md-4 mb-2">
+        <span class="text-muted small">Capacity</span>
+        <div class="fw-medium"><%= @room.capacity %> people</div>
+      </div>
+
+      <div class="col-md-8 mb-2">
+        <span class="text-muted small">Description</span>
+        <div class="fw-medium">
+          <%= @room.description.presence || "No description provided." %>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
-<h2>Upcoming Bookings</h2>
-<% upcoming_bookings = @room.bookings.upcoming.where(status: 'confirmed').order(start_time: :asc) %>
-<% if upcoming_bookings.any? %>
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>Date</th>
-        <th>Time</th>
-        <th>Duration</th>
-        <th>Booked By</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% upcoming_bookings.each do |booking| %>
-        <tr>
-          <td><%= booking.start_time.to_date %></td>
-          <td><%= booking.start_time.strftime("%H:%M") %> - <%= booking.end_time.strftime("%H:%M") %></td>
-          <td><%= booking.duration_in_hours %> hours</td>
-          <td><%= booking.user.name %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-<% else %>
-  <p>No upcoming bookings for this room.</p>
-<% end %>
+<!-- 🔷 Upcoming Bookings -->
+<div class="card border-0 shadow-sm rounded-4">
+  <div class="card-header bg-white border-0 fw-semibold">
+    Upcoming Bookings
+  </div>
 
-<%= link_to "Back to All Rooms", rooms_path, class: "btn btn-secondary" %>
+  <div class="card-body">
+
+    <% upcoming_bookings = @room.bookings.upcoming.where(status: 'confirmed').order(start_time: :asc) %>
+
+    <% if upcoming_bookings.any? %>
+      <table class="table align-middle">
+        <thead class="text-muted small">
+          <tr>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Duration</th>
+            <th>Booked By</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% upcoming_bookings.each do |booking| %>
+            <tr>
+              <td><%= booking.start_time.strftime("%d %b %Y") %></td>
+
+              <td class="small">
+                <%= booking.start_time.strftime("%H:%M") %> -
+                <%= booking.end_time.strftime("%H:%M") %>
+              </td>
+
+              <td>
+                <span class="badge bg-light text-dark">
+                  <%= booking.duration_in_hours %>h
+                </span>
+              </td>
+
+              <td class="fw-medium"><%= booking.user.name %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+
+    <% else %>
+      <div class="text-center text-muted py-4">
+        📭 No upcoming bookings
+      </div>
+    <% end %>
+
+  </div>
+</div>
+
+<!-- 🔙 Back Button -->
+<div class="mt-4">
+  <%= link_to "← Back to Rooms",
+        rooms_path,
+        class: "btn btn-outline-secondary rounded-pill px-4" %>
+</div>

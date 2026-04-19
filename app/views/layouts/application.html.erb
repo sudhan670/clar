@@ -27,12 +27,10 @@
                 </span>
               </li>
               <li class="nav-item">
-              <%= button_to "Sign out", destroy_user_session_path, method: :delete %>
-          
-              </li>
+                <%= button_to "Sign out",destroy_user_session_path, method: :delete, class: "btn btn-sm btn-light rounded-pill px-3" %></li>
             <% else %>
-              <li class="nav-item"><%= link_to "Sign In", new_user_session_path, class: "nav-link" %></li>
-              <li class="nav-item"><%= link_to "Register", new_user_registration_path, class: "nav-link" %></li>
+              <li class="nav-item"><%= link_to "Sign In", new_user_session_path, class: "nav-link btn btn-sm rounded-pill px-3" %></li>
+              <li class="nav-item"><%= link_to "Register", new_user_registration_path, class: "nav-link btn btn-sm rounded-pill px-3" %></li>
             <% end %>
           </ul>
         </div>
@@ -45,3 +43,44 @@
     </div>
   </body>
 </html>
+<style>
+  body {
+  font-family: 'Inter', sans-serif;
+}
+
+/* Navbar Gradient */
+.custom-navbar {
+  background: linear-gradient(135deg, #4f46e5, #3b82f6);
+}
+
+/* Nav links */
+.nav-link {
+  color: rgba(255,255,255,0.85) !important;
+  transition: 0.3s;
+}
+
+.nav-link:hover {
+  color: #fff !important;
+  transform: translateY(-1px);
+}
+
+/* Brand */
+.navbar-brand {
+  color: #fff !important;
+  font-size: 1.3rem;
+}
+
+/* Card polish */
+.card {
+  background: #ffffff;
+}
+
+/* Buttons smooth */
+.btn {
+  transition: all 0.2s ease-in-out;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+</style>

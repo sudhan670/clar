@@ -1,34 +1,71 @@
-<h1><%= @room.new_record? ? "Add New Room" : "Edit Room" %></h1>
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
 
-<%= form_with(model: @room, local: true) do |form| %>
-  <% if @room.errors.any? %>
-    <div class="alert alert-danger">
-      <h2><%= pluralize(@room.errors.count, "error") %> prohibited this room from being saved:</h2>
-      <ul>
-        <% @room.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
+      <div class="card shadow-sm p-4">
+
+        <h3 class="mb-3 text-center">
+          <%= @room.new_record? ? "Add New Room" : "Edit Room" %>
+        </h3>
+
+        <%= form_with(model: @room, local: true) do |form| %>
+
+          <!-- 🔴 Errors -->
+          <% if @room.errors.any? %>
+            <div class="alert alert-danger">
+              <strong>
+                <%= pluralize(@room.errors.count, "error") %> prevented saving:
+              </strong>
+              <ul class="mb-0">
+                <% @room.errors.full_messages.each do |message| %>
+                  <li><%= message %></li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+
+          <!-- Name -->
+          <div class="mb-3">
+            <%= form.label :name, class: "form-label" %>
+            <%= form.text_field :name,
+                  class: "form-control",
+                  placeholder: "Enter room name" %>
+          </div>
+
+          <!-- Capacity -->
+          <div class="mb-3">
+            <%= form.label :capacity, class: "form-label" %>
+            <%= form.number_field :capacity,
+                  min: 1,
+                  class: "form-control",
+                  placeholder: "Enter capacity" %>
+          </div>
+
+          <!-- Description -->
+          <div class="mb-3">
+            <%= form.label :description, class: "form-label" %>
+            <%= form.text_area :description,
+                  rows: 4,
+                  class: "form-control",
+                  placeholder: "Optional description" %>
+          </div>
+
+          <!-- Actions -->
+          <div class="d-flex justify-content-between mt-3">
+            <%= link_to "Cancel",
+                  rooms_path,
+                  class: "btn btn-outline-secondary" %>
+
+            <%= form.submit(
+                  @room.new_record? ? "Create Room" : "Update Room",
+                  class: "btn btn-primary"
+                ) %>
+          </div>
+
         <% end %>
-      </ul>
+
+      </div>
+
     </div>
-  <% end %>
-
-  <div class="form-group mb-3">
-    <%= form.label :name %>
-    <%= form.text_field :name, class: "form-control" %>
   </div>
-
-  <div class="form-group mb-3">
-    <%= form.label :capacity %>
-    <%= form.number_field :capacity, min: 1, class: "form-control" %>
-  </div>
-
-  <div class="form-group mb-3">
-    <%= form.label :description %>
-    <%= form.text_area :description, class: "form-control", rows: 5 %>
-  </div>
-
-  <div class="actions">
-    <%= form.submit class: "btn btn-primary" %>
-    <%= link_to "Cancel", rooms_path, class: "btn btn-secondary" %>
-  </div>
-<% end %>
+</div>

@@ -75,10 +75,10 @@
 
       <!-- Actions -->
       <div class="d-flex justify-content-end gap-2">
-        <%= link_to "Cancel", bookings_path, class: "btn btn-secondary" %>
+        <%= link_to "Cancel", bookings_path, class: "btn btn-secondary btn-grey rounded-pill px-3" %>
 
         <%= form.submit "Create Booking",
-            class: "btn btn-primary",
+            class: "btn btn-primary rounded-pill px-3",
             data: { disable_with: "Creating..." } %>
       </div>
 
