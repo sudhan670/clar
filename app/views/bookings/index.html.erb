@@ -142,7 +142,7 @@
                               booking.canceled? ? "danger" : "warning" %>
 
                   <span class="badge bg-<%= badge %> mb-3">
-                    <%= booking.status.humanize %>
+                    <%= booking.status %>
                   </span>
 
                   <div class="mt-auto d-flex gap-2">
@@ -203,7 +203,7 @@
                               booking.canceled? ? "danger" : "warning" %>
 
                   <span class="badge bg-<%= badge %> mb-3">
-                    <%= booking.status.humanize %>
+                    <%= booking.status %>
                   </span>
 
                   <%= link_to "View",
