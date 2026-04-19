@@ -4,12 +4,13 @@ class BookingsController < ApplicationController
   before_action :set_room,    only: [:new, :show]
 
   def index
-    @bookings = current_user.bookings.includes(:room)
-    @invitations = current_user.meeting_participants
-                               .pending
-                               .includes(booking: [:room, :user])
-                               .order('bookings.start_time')
-  end
+  @bookings = current_user.bookings.includes(:room)
+
+  @invitations = current_user.meeting_participants
+                              .pending
+                              .includes(booking: [:room, :user])
+                              .order('bookings.start_time')
+end
 
   def new
     @booking = Booking.new
