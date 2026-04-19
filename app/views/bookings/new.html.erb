@@ -1,98 +1,101 @@
 <div class="container">
   <div class="row justify-content-center">
     <div class="col-md-8">
-      <div class="card">
+      <div class="card shadow-sm">
         <div class="card-header">
           <h2 class="mb-0">Create New Booking</h2>
         </div>
-        
-        <%= form_with(model: @booking, local: true, class: 'card-body') do |form| %>
-          <% if @booking.errors.any? %>
-            <div class="alert alert-danger">
-              <h4><%= pluralize(@booking.errors.count, "error") %> prohibited this booking from being saved:</h4>
-              <ul>
-                <% @booking.errors.full_messages.each do |message| %>
-                  <li><%= message %></li>
-                <% end %>
-              </ul>
-            </div>
-          <% end %>
 
-          <div class="mb-3">
-            <%= form.label :room_id, class: 'form-label' %>
-            <%= form.collection_select :room_id, Room.available, :id, :name, 
-                { prompt: 'Select a Room' }, 
-                { class: 'form-select', required: true } %>
-          </div>
+    <%= form_with(model: @booking, local: true, class: "card-body") do |form| %>
 
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <%= form.label :start_time, class: 'form-label' %>
-              <%= form.datetime_local_field :start_time, 
-                  class: 'form-control', 
-                  required: true, 
-                  min: Time.current.strftime("%Y-%m-%dT%H:%M") %>
-            </div>
-
-            <div class="col-md-6 mb-3">
-              <%= form.label :duration_in_hours, class: 'form-label' %>
-              <%= form.number_field :duration_in_hours, 
-                  class: 'form-control', 
-                  min: 1, 
-                  max: 4, 
-                  required: true,
-                  placeholder: 'Duration (1-4 hours)' %>
-            </div>
-          </div>
-
-          <div class="mb-3">
-            <%= form.label :participants, class: 'form-label' %>
-            <%= form.collection_select :participant_ids, 
-                User.where.not(id: current_user.id), 
-                :id, 
-                :name, 
-                { prompt: 'Select Participants' }, 
-                { 
-                  class: 'form-select', 
-                  multiple: true,
-                  data: { 'select2-multiple': true }
-                } 
-            %>
-          </div>
-
-          <div class="mb-3">
-            <%= form.label :description, class: 'form-label' %>
-            <%= form.text_area :description, 
-                class: 'form-control', 
-                rows: 3, 
-                placeholder: 'Optional meeting description' %>
-          </div>
-
-          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-            <%= link_to bookings_path, class: 'btn btn-secondary me-md-2' do %>
-              <i class="bi bi-x-circle me-1"></i>Cancel
+      <% if @booking.errors.any? %>
+        <div class="alert alert-danger">
+          <h5><%= pluralize(@booking.errors.count, "error") %> prevented saving:</h5>
+          <ul class="mb-0">
+            <% @booking.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
             <% end %>
-            
-            <%= form.submit 'Create Booking', 
-                class: 'btn btn-primary', 
-                data: { disable_with: 'Creating...' } do %>
-              <i class="bi bi-calendar-plus me-1"></i>Create Booking
-            <% end %>
-          </div>
-        <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <!-- Room Selection -->
+      <div class="mb-3">
+        <%= form.label :room_id, class: "form-label" %>
+        <%= form.collection_select :room_id,
+            @rooms,
+            :id,
+            :name,
+            { prompt: "Select a Room" },
+            { class: "form-select", required: true } %>
       </div>
-    </div>
+
+      <!-- Time & Duration -->
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <%= form.label :start_time, class: "form-label" %>
+          <%= form.datetime_local_field :start_time,
+              class: "form-control",
+              required: true,
+              min: Time.current.strftime("%Y-%m-%dT%H:%M") %>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <%= form.label :duration_in_hours, class: "form-label" %>
+          <%= form.number_field :duration_in_hours,
+              class: "form-control",
+              min: 1,
+              max: 4,
+              required: true %>
+        </div>
+      </div>
+
+      <!-- Participants -->
+      <div class="mb-3">
+        <%= form.label :participant_ids, "Participants", class: "form-label" %>
+        <%= form.collection_select :participant_ids,
+            @users,
+            :id,
+            :name,
+            {},
+            {
+              class: "form-select",
+              multiple: true,
+              data: { select2: true }
+            } %>
+      </div>
+
+      <!-- Description -->
+      <div class="mb-3">
+        <%= form.label :description, class: "form-label" %>
+        <%= form.text_area :description,
+            class: "form-control",
+            rows: 3 %>
+      </div>
+
+      <!-- Actions -->
+      <div class="d-flex justify-content-end gap-2">
+        <%= link_to "Cancel", bookings_path, class: "btn btn-secondary" %>
+
+        <%= form.submit "Create Booking",
+            class: "btn btn-primary",
+            data: { disable_with: "Creating..." } %>
+      </div>
+
+    <% end %>
+  </div>
+</div>
+
   </div>
 </div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    // Optional: Use Select2 for multiple participant selection
-    if (typeof $().select2 === 'function') {
-      $('[data-select2-multiple]').select2({
-        placeholder: 'Select participants',
-        allowClear: true
-      });
-    }
-  });
+document.addEventListener("DOMContentLoaded", function() {
+  if (window.jQuery && $.fn.select2) {
+    $('[data-select2]').select2({
+      placeholder: "Select participants",
+      width: '100%'
+    });
+  }
+});
 </script>

@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   devise_for :users
   
-  resources :bookings, only: [:index, :show, :destroy]
+  resources :bookings
   resources :meeting_participants, only: [:update]
   
   namespace :admin do
