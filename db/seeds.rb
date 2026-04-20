@@ -1,49 +1,97 @@
-# This file should ensure the existence of records required to run the application in every environment (production,
-# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Example:
-#
-#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
-#     MovieGenre.find_or_create_by!(name: genre_name)
-#   end
-# Create admin user
-admin = User.create!(
-  email: 'admin@example.com',
-  password: 'password123',
-  name: 'Admin User',
-  role: 'admin',
-  position: 'admin'
-)
+puts "🌱 Seeding started..."
 
-# Create employee users
-employees = [
-  { email: 'hr@example.com', name: 'HR Manager', position: 'hr' },
-  { email: 'teamlead@example.com', name: 'Team Lead', position: 'team_lead' },
-  { email: 'senior@example.com', name: 'Senior Employee', position: 'senior_employee' },
-  { email: 'junior@example.com', name: 'Junior Developer', position: 'junior_developer' }
+
+users_data = [
+  { email: 'admin@example.com', name: 'Admin User', role: 'admin', position: 'admin' },
+  { email: 'hr@example.com', name: 'HR Manager', role: 'employee', position: 'hr' },
+  { email: 'teamlead@example.com', name: 'Team Lead', role: 'employee', position: 'team_lead' },
+  { email: 'senior@example.com', name: 'Senior Employee', role: 'employee', position: 'senior_employee' },
+  { email: 'junior@example.com', name: 'Junior Developer', role: 'employee', position: 'junior_developer' },
+  { email: 'sudhandurai670@gmail.com', name: 'Sudhaned', role: 'employee', position: 'junior_developer' }
 ]
 
-employees.each do |employee|
-  User.create!(
-    email: employee[:email],
-    password: 'password123',
-    name: employee[:name],
-    role: 'employee',
-    position: employee[:position]
+users = {}
+
+users_data.each do |data|
+  user = User.find_or_initialize_by(email: data[:email])
+  user.update!(
+    name: data[:name],
+    role: data[:role],
+    position: data[:position],
+    password: 'password123'
   )
+  users[data[:email]] = user
 end
 
-# Create meeting rooms
-rooms = [
-  { name: 'Conference Room A', capacity: 20, description: 'Large conference room with projector and whiteboard' },
-  { name: 'Conference Room B', capacity: 12, description: 'Medium conference room with video conferencing' },
-  { name: 'Meeting Room 1', capacity: 6, description: 'Small meeting room for team discussions' },
-  { name: 'Meeting Room 2', capacity: 4, description: 'Small meeting room with whiteboard' }
+puts "✅ Users created"
+
+
+rooms_data = [
+  { name: 'Ruby Shell Worker', capacity: 23, description: '' },
+  { name: 'New Room Adder', capacity: 12, description: '' }
 ]
 
-rooms.each do |room|
-  Room.create!(room)
+rooms = {}
+
+rooms_data.each do |data|
+  room = Room.find_or_initialize_by(name: data[:name])
+  room.update!(
+    capacity: data[:capacity],
+    description: data[:description]
+  )
+  rooms[data[:name]] = room
 end
 
-puts "Seed data created successfully!"
+puts "✅ Rooms created"
+
+# -------------------------------
+# BOOKINGS
+# -------------------------------
+bookings_data = [
+  { room: 'Ruby Shell Worker', user: 'admin@example.com', start_time: '2026-04-20 01:30', end_time: '2026-04-20 03:30' },
+  { room: 'New Room Adder', user: 'junior@example.com', start_time: '2026-04-19 23:00', end_time: '2026-04-20 01:00' },
+  { room: 'New Room Adder', user: 'admin@example.com', start_time: '2026-04-19 15:00', end_time: '2026-04-19 17:00' },
+  { room: 'Ruby Shell Worker', user: 'sudhandurai670@gmail.com', start_time: '2026-04-20 02:00', end_time: '2026-04-20 04:00' }
+]
+
+bookings = []
+
+bookings_data.each do |data|
+  booking = Booking.find_or_initialize_by(
+    room: rooms[data[:room]],
+    user: users[data[:user]],
+    start_time: data[:start_time]
+  )
+
+  booking.update!(
+    end_time: data[:end_time],
+    description: ''
+  )
+
+  bookings << booking
+end
+
+puts "✅ Bookings created"
+
+
+participants_data = [
+  { booking_index: 0, user: 'senior@example.com', status: 'accepted' },
+  { booking_index: 0, user: 'admin@example.com', status: 'accepted' },
+  { booking_index: 1, user: 'junior@example.com', status: 'accepted' },
+  { booking_index: 2, user: 'sudhandurai670@gmail.com', status: 'accepted' },
+  { booking_index: 3, user: 'senior@example.com', status: 'pending' },
+  { booking_index: 3, user: 'sudhandurai670@gmail.com', status: 'accepted' }
+]
+
+participants_data.each do |data|
+  MeetingParticipant.find_or_create_by!(
+    booking: bookings[data[:booking_index]],
+    user: users[data[:user]]
+  ) do |mp|
+    mp.status = data[:status]
+  end
+end
+
+puts "✅ Meeting participants created"
+
+puts "🎉 Seeding completed successfully!"
