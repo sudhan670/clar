@@ -5,21 +5,21 @@
   <div class="col-md-4">
     <div class="card p-3 shadow-sm rounded-4">
       <small class="text-muted">Total Rooms</small>
-      <h2><%= @rooms.count %></h2>
+      <h2><%= @rooms&.count || 0 %></h2>
     </div>
   </div>
 
   <div class="col-md-4">
     <div class="card p-3 shadow-sm rounded-4">
       <small class="text-muted">Today's Bookings</small>
-      <h2 class="text-success"><%= @today_bookings.count %></h2>
+      <h2 class="text-success"><%= @today_bookings&.count || 0 %></h2>
     </div>
   </div>
 
   <div class="col-md-4">
     <div class="card p-3 shadow-sm rounded-4">
       <small class="text-muted">Employees</small>
-      <h2 class="text-primary"><%= @users.count %></h2>
+      <h2 class="text-primary"><%= @users&.count || 0 %></h2>
     </div>
   </div>
 </div>
@@ -39,10 +39,10 @@
       </thead>
 
       <tbody>
-        <% @rooms.each do |room| %>
+        <% (@rooms || []).each do |room| %>
           <tr>
-            <td><%= room.name %></td>
-            <td><%= room.capacity %></td>
+            <td><%= room.name || "N/A" %></td>
+            <td><%= room.capacity || "-" %></td>
             <td>
               <%= link_to "View", room_path(room), class: "btn btn-sm btn-outline-primary" %>
             </td>
@@ -60,7 +60,7 @@
   <div class="card-header fw-semibold">Today's Meetings</div>
 
   <div class="card-body">
-    <% if @today_bookings.any? %>
+    <% if @today_bookings.present? %>
       <table class="table">
         <thead>
           <tr>
@@ -72,7 +72,7 @@
 
         <tbody>
           <% @today_bookings.each do |booking| %>
-            <% status = booking.status || "pending" %>
+            <% status = booking.status.presence || "pending" %>
 
             <tr>
               <td><%= booking.room&.name || "N/A" %></td>
@@ -83,7 +83,10 @@
               </td>
 
               <td>
-                <span class="badge bg-<%= status == 'confirmed' ? 'success' : (status == 'canceled' ? 'danger' : 'warning') %>">
+                <span class="badge bg-<%= 
+                  status == 'confirmed' ? 'success' : 
+                  status == 'canceled' ? 'danger' : 
+                  'warning' %>">
                   <%= status %>
                 </span>
               </td>
@@ -112,23 +115,22 @@
       </thead>
 
       <tbody>
-        <% @users.each do |user| %>
-          <% today_hours = user.respond_to?(:daily_booking_hours) ? user.daily_booking_hours(Date.today) : 0 %>
+        <% (@users || []).each do |user| %>
+          <% today_hours = (user.respond_to?(:daily_booking_hours) ? user.daily_booking_hours(Date.today).to_f : 0.0) %>
           <% remaining = [2 - today_hours, 0].max %>
 
           <tr>
-            <td><%= user.name %></td>
-            <td><%= user.position %></td>
+            <td><%= user.name || "N/A" %></td>
+            <td><%= user.position || "-" %></td>
 
             <td style="width: 40%;">
               <div class="progress">
-                <div class="progress-bar"
-                     style="width: <%= (today_hours / 2.0) * 100 %>%;">
-                </div>
+                <div class="progress-bar bg-success"
+                     style="width: <%= (today_hours / 2.0 * 100).round(2) %>%;"></div>
               </div>
 
               <small>
-                <%= today_hours %>h used / <%= remaining %>h left
+                <%= today_hours.round(2) %>h used / <%= remaining.round(2) %>h left
               </small>
             </td>
           </tr>
@@ -143,7 +145,7 @@
   <div class="card-header fw-semibold">Pending Invitations</div>
 
   <div class="card-body">
-    <% if @pending_invitations.any? %>
+    <% if @pending_invitations.present? %>
       <table class="table">
         <thead>
           <tr>
@@ -160,10 +162,7 @@
             <tr>
               <td><%= invitation.user&.name || "N/A" %></td>
               <td><%= booking&.room&.name || "N/A" %></td>
-
-              <td>
-                <%= booking&.start_time&.strftime("%d %b %H:%M") || "-" %>
-              </td>
+              <td><%= booking&.start_time&.strftime("%d %b %H:%M") || "-" %></td>
             </tr>
           <% end %>
         </tbody>

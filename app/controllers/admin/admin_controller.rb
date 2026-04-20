@@ -3,21 +3,20 @@ class Admin::AdminController < ApplicationController
   before_action :authorize_admin
   
   def dashboard
-  @rooms = Room.all
+    @rooms = Room.all
+    @users = User.where(role: 'employee')
 
-  @today_bookings = Booking
-                      .includes(:room)
-                      .where(start_time: Time.zone.today.all_day)
+    @today_bookings = Booking
+      .includes(:room)
+      .where(start_time: Time.zone.today.all_day)
 
-  @users = User.where(role: 'employee')
-
-  @pending_invitations = MeetingParticipant
-                           .includes(booking: [:room, :user])
-                           .where(status: 'pending')
-                           .references(:bookings)
-                           .order('bookings.start_time ASC')
-end
-  
+    @pending_invitations = MeetingParticipant
+      .includes(booking: :room, user: {})
+      .where(status: 'pending')
+      .joins(:booking)
+      .order('bookings.start_time')
+  end
+    
   private
   
   def authorize_admin
