@@ -16,8 +16,9 @@ class User < ApplicationRecord
   end
   
   def daily_booking_hours(date)
-    bookings.where("DATE(start_time) = ?", date.to_date)
-            .sum("ROUND((julianday(end_time) - julianday(start_time)) * 24, 1)")
+    bookings
+      .where(start_time: date.all_day)
+      .sum("EXTRACT(EPOCH FROM (end_time - start_time)) / 3600.0")
   end
   
   def can_book_more_time?(start_time, end_time)
