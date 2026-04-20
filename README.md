@@ -1,53 +1,62 @@
-# Meeting Booking System
+# 🏢 Meeting Room Booking Application
 
-This project is a **Room Booking System** that allows users to book rooms, check booking statuses, and manage reservations through an admin panel.
+A web-based Meeting Room Booking System that streamlines scheduling, managing, and coordinating meeting rooms within an organization. The application supports role-based access for both **Users and Administrators**, ensuring smooth collaboration and efficient resource utilization.
 
-## Prerequisites
+---
 
-- **Ruby Version:** 3.2.2
-- **System Dependencies:**
-  - Ubuntu
-  - Windows Linux Subsystem (WSL)
-- **Database:** SQLite3
+## 🚀 Features
 
-## Setup and Installation
+### 👤 User Features
+- Secure user authentication (Login / Logout)
+- View available meeting rooms and time slots
+- Create booking requests for meetings
+- Accept or reject meeting invitations
+- View personal booking history and status updates
 
-### 1. Clone the Repository
-```sh
-  git clone https://github.com/sudhan670/clar.git
-  cd clar
-```
+### 🛠️ Admin Features
+- Admin dashboard for complete system control
+- Create, update, and manage meeting rooms
+- Approve or reject booking requests
+- Manage users and their roles
+- Monitor all scheduled meetings and room utilization
 
-### 2. Install Dependencies
-```sh
-  bundle install
-```
+### 📊 Dashboard
+- Separate dashboards for **Users** and **Admins**
+- Real-time booking status updates
+- Clear visibility of room availability and schedules
 
-### 3. Database Setup
-```sh
-  rails db:create
-  rails db:migrate
-```
+---
 
-### 4. Run the Application
-```sh
-  rails server
-```
+## 🔐 Authentication & Authorization
+- Role-based access control (User / Admin)
+- Secure login system
+- Protected routes based on user roles
 
-## Running Tests
-To run the test suite, execute:
-```sh
-  rspec
-```
+---
 
-## Features
-- **User Dashboard:** Users can book rooms and view their booking status.
-- **Booking Status:** Real-time updates on accepted or rejected requests.
-- **Admin Panel:** Administrators can view all bookings and manage reservations.
-- **SQLite3 Database:** Lightweight and easy-to-use database integration.
+## 📅 Core Functionality
+- Meeting room creation and configuration
+- Booking management system
+- Invitation workflow (Accept / Reject)
+- Conflict-free scheduling of rooms
 
-## Screenshots
+---
 
+## 🧱 Tech Stack (Example)
+- Backend: Ruby on Rails / Node.js (customizable)
+- Frontend: HTML, CSS, Bootstrap / React (optional)
+- Database: PostgreSQL / MySQL
+- Authentication: Devise / JWT
+
+---
+
+## 📌 Project Goal
+To provide an efficient and organized platform for managing meeting room bookings, reducing scheduling conflicts, and improving workplace productivity.
+
+---
+
+## 📷 Screenshots
+*(Add screenshots of dashboards, booking page, and admin panel here)*
 ### Room Booking Page
 ![Room Booking](https://github.com/sudhan670/clar/blob/main/new%20room.png)
 
@@ -57,21 +66,18 @@ To run the test suite, execute:
 ### Admin Panel
 ![Admin Dashboard](https://github.com/sudhan670/clar/blob/main/admin.png)
 ![Admin Details](https://github.com/sudhan670/clar/blob/main/admin%20details.png)
+---
 
-## Deployment
-For deploying the application, consider using **Heroku** or **AWS**. Ensure that the database configurations align with the production environment.
+## ⚙️ Setup Instructions
+```bash
+# Clone the repository
+git clone https://github.com/your-username/meeting-room-booking-app.git
 
-## Contributing
-If you'd like to contribute:
-1. Fork the repository
-2. Create a new branch (`git checkout -b feature-branch`)
-3. Commit your changes (`git commit -m 'Add new feature'`)
-4. Push to the branch (`git push origin feature-branch`)
-5. Open a pull request
+# Install dependencies
+bundle install / npm install
 
-## License
-This project is licensed under the **MIT License**.
+# Setup database
+rails db:create db:migrate db:seed
 
-## Contact
-For further inquiries, reach out at [GitHub](https://github.com/sudhan670).
-
+# Run the server
+rails server
